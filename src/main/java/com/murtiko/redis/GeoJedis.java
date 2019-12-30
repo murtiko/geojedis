@@ -1,9 +1,7 @@
 package com.murtiko.redis;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -12,20 +10,12 @@ import java.util.function.Function;
 
 import redis.clients.jedis.BinaryClient.LIST_POSITION;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisSentinelPool;
 import redis.clients.jedis.ScanResult;
 import redis.clients.jedis.SortingParams;
 import redis.clients.jedis.Tuple;
 import redis.clients.util.Pool;
 
-public class GeoJedis implements redis.clients.jedis.JedisCommands,
-                                 redis.clients.jedis.BinaryJedisCommands,
-//        , redis.clients.jedis.BasicCommands
-//        redis.clients.jedis.MultiKeyCommands,
-//        redis.clients.jedis.AdvancedJedisCommands, redis.clients.jedis.ScriptingCommands,
-//        redis.clients.jedis.ClusterCommands, redis.clients.jedis.SentinelCommands,
-//        redis.clients.jedis.MultiKeyBinaryCommands,
-//        redis.clients.jedis.AdvancedBinaryJedisCommands, redis.clients.jedis.BinaryScriptingCommands,
+public class GeoJedis implements redis.clients.jedis.JedisCommands, redis.clients.jedis.BinaryJedisCommands,
         java.io.Closeable {
 
     private final GeoJedisConfig config;

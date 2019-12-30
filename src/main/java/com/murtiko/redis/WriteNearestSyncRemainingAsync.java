@@ -5,10 +5,15 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Function;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.util.Pool;
 
 public class WriteNearestSyncRemainingAsync implements WriteStrategy {
+
+    private static final Logger log = LogManager.getLogger(WriteNearestSyncRemainingAsync.class.getName());
 
     private ExecutorService executor = Executors.newCachedThreadPool();
     
@@ -35,8 +40,7 @@ public class WriteNearestSyncRemainingAsync implements WriteStrategy {
                 executor.submit(() -> JedisUtil.exec(p.getValue(), function));
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            // Tracer.trace(Level.WARNING, "Failed redis op on {0} : {1}. Will try next one..", p.getKey(), e);
+            log.warn("Failed redis op on " + p.getKey(), e);
         }
         return resp;
     }  
