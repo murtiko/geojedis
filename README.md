@@ -1,2 +1,32 @@
 # geojedis
-A simple wrapper to Jedis that replicates operations on multiple data centers to provide basic geo-redundancy
+<p>A simple wrapper to Jedis that replicates operations on multiple data centers to provide basic geo-redundancy.</p>
+
+<p>Updates are performed on the first available local pool synchronously, and asynchronously on remaining pools.</p>
+
+<p>Reads are performed on the first available pool, where local pools are attempted prior to remote pools.</p>
+
+<p>It is possible to add custom read/update strategies.</p>
+
+Sample code
+------------
+
+        GeoJedisConfig pools = new GeoJedisConfig();
+        
+        Pool<Jedis> local = new JedisSentinelPool("mymaster", 
+                new HashSet<>(Arrays.asList(new String[] {"localsentinel01:26379", "localsentinel02:26379", "localsentinel03:26379"})));
+        pools.addLocalPool("local", local);
+        
+        Pool<Jedis> remote = new JedisSentinelPool("mymaster", 
+                new HashSet<>(Arrays.asList(new String[] {"remotesentinel01:26379", "remotesentinel02:26379", "remotesentinel03:26379"})));
+        pools.addRemotePool("remote", remote);
+        
+        GeoJedis geoJedis = new GeoJedis(pools);
+        
+        geoJedis.set("testkey", "testvalue");
+        System.out.println("set testkey=testvalue");
+        
+        String val = geoJedis.get("testkey");
+        System.out.println("queried testkey=" + val);
+
+
+
