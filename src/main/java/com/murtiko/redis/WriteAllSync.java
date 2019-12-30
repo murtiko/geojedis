@@ -11,8 +11,8 @@ public class WriteAllSync implements WriteStrategy {
     @Override
     public <T> T write(GeoJedisConfig config, Function<Jedis, T> function) {
         final List<T> resp = new LinkedList<>();
-        config.getLocalPools().forEach((k, v) -> resp.add(JedisUtil.tryExec(v, function)));
-        config.getRemotePools().forEach((k, v) -> JedisUtil.tryExec(v, function));
+        config.getLocalPools().forEach((k, v) -> resp.add(JedisUtil.tryExec(config, k, v, function)));
+        config.getRemotePools().forEach((k, v) -> JedisUtil.tryExec(config, k, v, function));
         return resp.isEmpty() ? null : resp.get(0);
     }
 

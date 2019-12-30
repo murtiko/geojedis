@@ -22,22 +22,22 @@ public class WriteNearestSyncRemainingAsync implements WriteStrategy {
         T resp = null;
         
         for(Entry<String, Pool<Jedis>> p : config.getLocalPools().entrySet()) {
-            resp = doWrite(function, resp, p);
+            resp = doWrite(config, function, resp, p);
         }
         
         for(Entry<String, Pool<Jedis>> p : config.getRemotePools().entrySet()) {
-            resp = doWrite(function, resp, p);
+            resp = doWrite(config, function, resp, p);
         }
 
         return resp;
     }
 
-    private <T> T doWrite(Function<Jedis, T> function, T resp, Entry<String, Pool<Jedis>> p) {
+    private <T> T doWrite(GeoJedisConfig config, Function<Jedis, T> function, T resp, Entry<String, Pool<Jedis>> p) {
         try {
             if(resp == null) {
-                resp = JedisUtil.exec(p.getValue(), function);
+                resp = JedisUtil.exec(config, p.getKey(), p.getValue(), function);
             } else {
-                executor.submit(() -> JedisUtil.exec(p.getValue(), function));
+                executor.submit(() -> JedisUtil.exec(config, p.getKey(), p.getValue(), function));
             }
         } catch (Exception e) {
             log.warn("Failed redis op on " + p.getKey(), e);

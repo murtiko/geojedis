@@ -17,14 +17,14 @@ public class ReadNearest implements ReadStrategy {
     public <T> T read(GeoJedisConfig config, Function<Jedis, T> function) {
         for(Entry<String, Pool<Jedis>> p : config.getLocalPools().entrySet()) {
             try {
-                return JedisUtil.exec(p.getValue(), function);
+                return JedisUtil.exec(config, p.getKey(), p.getValue(), function);
             } catch (Exception e) {
                 log.warn("Failed redis op on " + p.getKey(), e);
             }
         }
         for(Entry<String, Pool<Jedis>> p : config.getRemotePools().entrySet()) {
             try {
-                return JedisUtil.exec(p.getValue(), function);
+                return JedisUtil.exec(config, p.getKey(), p.getValue(), function);
             } catch (Exception e) {
                 log.warn("Failed redis op on " + p.getKey(), e);
             }
