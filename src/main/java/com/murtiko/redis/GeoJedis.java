@@ -1182,27 +1182,4 @@ public class GeoJedis implements redis.clients.jedis.JedisCommands,
         return read(j -> j.zscore(arg0, arg1));
     }
     
-    // ----
-    
-    public static void main(String[] args) {
-        
-        GeoJedisConfig pools = new GeoJedisConfig();
-        
-        Pool<Jedis> local = new JedisSentinelPool("smartfren", 
-                new HashSet<>(Arrays.asList(new String[] {"10.35.36.121:26379", "10.35.36.125:26379", "10.35.36.126:26379"})));
-        pools.addLocalPool("local", local);
-        
-        Pool<Jedis> remote = new JedisSentinelPool("mob_dsp", 
-                new HashSet<>(Arrays.asList(new String[] {"10.35.36.191:26379", "10.35.36.192:26379", "10.35.36.194:26379"})));
-        pools.addRemotePool("remote", remote);
-        
-        GeoJedis geoJedis = new GeoJedis(pools);
-        
-        geoJedis.set("testkey", "testvalue");
-        System.out.println("set testkey=testvalue");
-        
-        String val = geoJedis.get("testkey");
-        System.out.println("queried testkey=" + val);
-        
-    }
 }
