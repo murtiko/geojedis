@@ -30,8 +30,6 @@ Sample code
         System.out.println("queried testkey=" + val);
 
 
-<p>It is possible to add custom read/update strategies.</p>
-
 <p>By default, a resilience4j circuit breaker is used for each pool, with the following default settings:</p>
 
         CircuitBreakerConfig circuitBreakerConfig = CircuitBreakerConfig.custom()
