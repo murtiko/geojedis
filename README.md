@@ -7,22 +7,6 @@
 
 <p>It is possible to add custom read/update strategies.</p>
 
-<p>By default, a resilience4j circuit breaker is used for each pool, with the following default settings:</p>
-
-        CircuitBreakerConfig circuitBreakerConfig = CircuitBreakerConfig.custom()
-                .failureRateThreshold(50)
-                .slowCallRateThreshold(100)
-                .slowCallDurationThreshold(Duration.ofSeconds(5000))
-                .permittedNumberOfCallsInHalfOpenState(5)
-                .minimumNumberOfCalls(5)
-                .slidingWindowSize(10)
-                .build();
-
-<p>It is possible to customize the circuit breaker, or disable it (by setting to null):</p>
-
-	CircuitBreakerUtil util = CircuitBreakerUtil.getInstance(myCustomCircuitBreakerRegistry);
-	GeoJedisConfig config = new GeoJedisConfig().setsetCircuitBreakerUtil(util); // null to disable circuit breaker
-	...
 
 Sample code
 ------------
@@ -46,4 +30,21 @@ Sample code
         System.out.println("queried testkey=" + val);
 
 
+<p>It is possible to add custom read/update strategies.</p>
 
+<p>By default, a resilience4j circuit breaker is used for each pool, with the following default settings:</p>
+
+        CircuitBreakerConfig circuitBreakerConfig = CircuitBreakerConfig.custom()
+                .failureRateThreshold(50)
+                .slowCallRateThreshold(100)
+                .slowCallDurationThreshold(Duration.ofSeconds(5000))
+                .permittedNumberOfCallsInHalfOpenState(5)
+                .minimumNumberOfCalls(5)
+                .slidingWindowSize(10)
+                .build();
+
+<p>It is possible to customize the circuit breaker, or disable it (by setting to null):</p>
+
+        CircuitBreakerUtil util = CircuitBreakerUtil.getInstance(myCustomCircuitBreakerRegistry);
+        GeoJedisConfig config = new GeoJedisConfig().setsetCircuitBreakerUtil(util); // null to disable circuit breaker
+        ...
