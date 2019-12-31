@@ -25,9 +25,9 @@ public class JedisUtil {
     }
     
     public static <T> T exec(GeoJedisConfig config, String poolName, Pool<Jedis> pool, Function<Jedis, T> function) {
-        CircuitBreakerUtil cbUtil = config.getCircuitBreakerUtil();
+        CircuitBreakerFactory cbUtil = config.getCircuitBreakerFactory();
         if(cbUtil != null) {
-            return config.getCircuitBreakerUtil().get(poolName).executeSupplier(() -> doExec(pool, function));
+            return config.getCircuitBreakerFactory().get(poolName).executeSupplier(() -> doExec(pool, function));
         }else {
             return doExec(pool, function);
         }

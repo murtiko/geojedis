@@ -1,5 +1,5 @@
 # geojedis
-<p>A simple wrapper to Jedis that replicates operations on multiple data centers to provide basic geo-redundancy.</p>
+<p>A simple wrapper to Jedis that replicates operations on multiple data centers on a best-effort basis to provide basic geo-redundancy.</p>
 
 <p>Updates are performed on the first available local pool synchronously, and asynchronously on remaining pools.</p>
 
