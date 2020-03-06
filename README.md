@@ -42,6 +42,7 @@ Sample code
                 .build();
 
 <p>It is possible to customize the circuit breaker, or disable it (by setting to null):</p>
+<p>For more info on resilience4j refer to https://resilience4j.readme.io/docs/circuitbreaker</p>
 
         CircuitBreakerUtil util = CircuitBreakerUtil.getInstance(myCustomCircuitBreakerRegistry);
         GeoJedisConfig config = new GeoJedisConfig().setsetCircuitBreakerUtil(util); // null to disable circuit breaker
