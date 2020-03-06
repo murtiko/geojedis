@@ -1,4 +1,4 @@
-package com.murtiko.redis;
+package io.github.murtiko.geojedis;
 
 import java.io.IOException;
 import java.util.Collection;

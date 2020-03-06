@@ -1,4 +1,4 @@
-package com.murtiko.redis;
+package io.github.murtiko.geojedis;
 
 import java.util.LinkedList;
 import java.util.List;

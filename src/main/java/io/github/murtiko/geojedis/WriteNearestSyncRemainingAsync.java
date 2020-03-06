@@ -1,4 +1,4 @@
-package com.murtiko.redis;
+package io.github.murtiko.geojedis;
 
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
@@ -14,7 +14,7 @@ import redis.clients.util.Pool;
 public class WriteNearestSyncRemainingAsync implements WriteStrategy {
 
     private static final Logger log = LogManager.getLogger(WriteNearestSyncRemainingAsync.class.getName());
-
+	
     private ExecutorService executor = Executors.newCachedThreadPool();
     
     @Override
@@ -22,10 +22,12 @@ public class WriteNearestSyncRemainingAsync implements WriteStrategy {
         T resp = null;
         
         for(Entry<String, Pool<Jedis>> p : config.getLocalPools().entrySet()) {
+        	log.debug("Writing on local {}", p.getKey());
             resp = doWrite(config, function, resp, p);
         }
         
         for(Entry<String, Pool<Jedis>> p : config.getRemotePools().entrySet()) {
+        	log.debug("Writing on remote {}", p.getKey());
             resp = doWrite(config, function, resp, p);
         }
 
@@ -37,10 +39,10 @@ public class WriteNearestSyncRemainingAsync implements WriteStrategy {
             if(resp == null) {
                 resp = JedisUtil.exec(config, p.getKey(), p.getValue(), function);
             } else {
-                executor.submit(() -> JedisUtil.exec(config, p.getKey(), p.getValue(), function));
+                executor.submit(() -> JedisUtil.tryExec(config, p.getKey(), p.getValue(), function));
             }
         } catch (Exception e) {
-            log.warn("Failed redis op on " + p.getKey(), e);
+        	log.warn("Failed redis op on " + p.getKey(), e);
         }
         return resp;
     }  
