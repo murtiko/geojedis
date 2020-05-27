@@ -1,12 +1,21 @@
 # geojedis
 <p>A simple wrapper to Jedis that replicates operations on multiple data centers on a best-effort basis to provide basic geo-redundancy.</p>
 
-<p>Updates are performed on the first available local pool synchronously, and asynchronously on remaining pools.</p>
+<p>Allows multiple "local" and "remote" pool categories.</p>
 
-<p>Reads are performed on the first available pool, where local pools are attempted prior to remote pools.</p>
+<p>redis.clients.jedis.JedisCommands and redis.clients.jedis.BinaryJedisCommands interfaces are implemented.</p>
+
+<p>Different read/write strategies can be selected.</p>
+
+<p>Available Read Strategies are:</p>
+<p>ReadNearest : (default) Reads are performed from the first available pool where local pools are attempted prior to remote pools. Pools of same category are attempted in the order they are configured.</p>
+
+<p>Available Write Strategies are:</p>
+<p>WriteLocalOnly : (default) Writes are performed only on all local pools, in the order they are configured.</p>
+<p>WriteAllSync : Writes are performed on all pools one by one from within the application thread.</p>
+<p>WriteNearestSyncRemainingAsync : Writes are performed on the first available pool from within the application thread. Remaining pools are updated in the background using a default cached thread-pool.</p>
 
 <p>It is possible to add custom read/update strategies.</p>
-
 
 Sample code
 ------------

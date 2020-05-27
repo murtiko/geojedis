@@ -23,7 +23,7 @@ public class GeoJedis implements redis.clients.jedis.JedisCommands, redis.client
     private final ReadStrategy readStrategy;
     
     public GeoJedis(GeoJedisConfig config) {
-        this(config, WriteStrategy.nearestSyncRemainingAsync(), ReadStrategy.nearest());
+        this(config, WriteStrategy.localOnly(), ReadStrategy.nearest());
     }
     
     public GeoJedis(GeoJedisConfig config, WriteStrategy writeStrategy, ReadStrategy readStrategy) {

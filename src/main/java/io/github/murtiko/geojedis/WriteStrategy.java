@@ -15,5 +15,9 @@ public interface WriteStrategy {
     static WriteStrategy allSync() {
         return new WriteAllSync();
     }
+    
+    static WriteStrategy localOnly() {
+        return new WriteLocalOnly();
+    }
 
 }
