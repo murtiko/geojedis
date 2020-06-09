@@ -23,11 +23,13 @@ Sample code
         GeoJedisConfig pools = new GeoJedisConfig();
         
         Pool<Jedis> local = new JedisSentinelPool("mymaster", 
-                new HashSet<>(Arrays.asList(new String[] {"localsentinel01:26379", "localsentinel02:26379", "localsentinel03:26379"})));
+                new HashSet<>(Arrays.asList(new String[] {"localsentinel01:26379",
+                    "localsentinel02:26379", "localsentinel03:26379"})));
         pools.addLocalPool("local", local);
         
         Pool<Jedis> remote = new JedisSentinelPool("mymaster", 
-                new HashSet<>(Arrays.asList(new String[] {"remotesentinel01:26379", "remotesentinel02:26379", "remotesentinel03:26379"})));
+                new HashSet<>(Arrays.asList(new String[] {"remotesentinel01:26379",
+                    "remotesentinel02:26379", "remotesentinel03:26379"})));
         pools.addRemotePool("remote", remote);
         
         GeoJedis geoJedis = new GeoJedis(pools);
