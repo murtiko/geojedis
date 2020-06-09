@@ -40,19 +40,21 @@ Sample code
         String val = geoJedis.get("testkey");
         System.out.println("queried testkey=" + val);
 
-<p>It is possible to configure circuit breaker, by default it is disabled.</p>
+<p>It is possible to wrap pool operations with circuit breakers. By default the circuit breaker functionality is disabled. It is possible to use a default resilience4j based one, or configure an external "circuit-breaker factory" impl.</p>
 
         // disables circuit-breaker
         pools.setCircuitBreakerFactory(null);
         
-        // enabled resilience4j based circuit-breaker (with default settings)
+        // enables the default resilience4j based circuit-breaker (with default settings)
         pools.setCircuitBreakerFactory(Resilience4JCircuitBreakerFactory.getInstance());
         
-        // enabled resilience4j based circuit-breaker (with custom registry)
+        // enables resilience4j based circuit-breaker (with custom registry)
         CircuitBreakerRegistry customRegistry = CircuitBreakerRegistry.of(customConfig);
         pools.setCircuitBreakerFactory(Resilience4JCircuitBreakerFactory.getInstance(customRegistry));
 
-<p>The default ciscuit breaker is configured with the following settings:</p>
+        // or use a custom circuit-breaker..
+
+<p>The default circuit breaker is configured with the following settings:</p>
 
         CircuitBreakerConfig circuitBreakerConfig = CircuitBreakerConfig.custom()
                 .failureRateThreshold(50)
@@ -64,3 +66,4 @@ Sample code
                 .build();
 
 <p>For more info on resilience4j refer to https://resilience4j.readme.io/docs/circuitbreaker</p>
+
