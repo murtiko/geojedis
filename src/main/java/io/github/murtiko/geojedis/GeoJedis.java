@@ -15,25 +15,25 @@ import redis.clients.jedis.SortingParams;
 import redis.clients.jedis.Tuple;
 import redis.clients.util.Pool;
 
-public class GeoJedis implements redis.clients.jedis.JedisCommands, redis.clients.jedis.BinaryJedisCommands,
-        java.io.Closeable {
+public class GeoJedis implements redis.clients.jedis.JedisCommands,
+        redis.clients.jedis.BinaryJedisCommands, java.io.Closeable {
 
     private final GeoJedisConfig config;
     private final WriteStrategy writeStrategy;
     private final ReadStrategy readStrategy;
-    
+
     public GeoJedis(GeoJedisConfig config) {
         this(config, WriteStrategy.localOnly(), ReadStrategy.nearest());
     }
-    
+
     public GeoJedis(GeoJedisConfig config, WriteStrategy writeStrategy, ReadStrategy readStrategy) {
         this.config = config;
         this.writeStrategy = writeStrategy;
         this.readStrategy = readStrategy;
     }
-    
+
     // ----
-    
+
     private <T> T write(Function<Jedis, T> function) {
         return writeStrategy.write(config, function);
     }
@@ -43,7 +43,7 @@ public class GeoJedis implements redis.clients.jedis.JedisCommands, redis.client
     }
 
     // ---- java.io.Closeable
-    
+
     @Override
     public void close() throws IOException {
         config.getLocalPools().forEach((k, v) -> tryClose(v));
@@ -56,15 +56,15 @@ public class GeoJedis implements redis.clients.jedis.JedisCommands, redis.client
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }    
+    }
 
     // ---- redis.clients.jedis.JedisCommands
-    
+
     @Override
     public Long append(String arg0, String arg1) {
         return write(j -> j.append(arg0, arg1));
     }
-        
+
     @Override
     public Long bitcount(String arg0) {
         return read(j -> j.bitcount(arg0));
@@ -166,7 +166,7 @@ public class GeoJedis implements redis.clients.jedis.JedisCommands, redis.client
     }
 
     @Override
-    public Map<String, String> hgetAll(String arg0) {        
+    public Map<String, String> hgetAll(String arg0) {
         return read(j -> j.hgetAll(arg0));
     }
 
@@ -521,12 +521,14 @@ public class GeoJedis implements redis.clients.jedis.JedisCommands, redis.client
     }
 
     @Override
-    public Set<Tuple> zrangeByScoreWithScores(String arg0, double arg1, double arg2, int arg3, int arg4) {
+    public Set<Tuple> zrangeByScoreWithScores(String arg0, double arg1, double arg2, int arg3,
+            int arg4) {
         return read(j -> j.zrangeByScoreWithScores(arg0, arg1, arg2, arg3, arg4));
     }
 
     @Override
-    public Set<Tuple> zrangeByScoreWithScores(String arg0, String arg1, String arg2, int arg3, int arg4) {
+    public Set<Tuple> zrangeByScoreWithScores(String arg0, String arg1, String arg2, int arg3,
+            int arg4) {
         return read(j -> j.zrangeByScoreWithScores(arg0, arg1, arg2, arg3, arg4));
     }
 
@@ -601,12 +603,14 @@ public class GeoJedis implements redis.clients.jedis.JedisCommands, redis.client
     }
 
     @Override
-    public Set<Tuple> zrevrangeByScoreWithScores(String arg0, double arg1, double arg2, int arg3, int arg4) {
+    public Set<Tuple> zrevrangeByScoreWithScores(String arg0, double arg1, double arg2, int arg3,
+            int arg4) {
         return read(j -> j.zrevrangeByScoreWithScores(arg0, arg1, arg2, arg3, arg4));
     }
 
     @Override
-    public Set<Tuple> zrevrangeByScoreWithScores(String arg0, String arg1, String arg2, int arg3, int arg4) {
+    public Set<Tuple> zrevrangeByScoreWithScores(String arg0, String arg1, String arg2, int arg3,
+            int arg4) {
         return read(j -> j.zrevrangeByScoreWithScores(arg0, arg1, arg2, arg3, arg4));
     }
 
@@ -636,7 +640,7 @@ public class GeoJedis implements redis.clients.jedis.JedisCommands, redis.client
     }
 
     // ---- redis.clients.jedis.BinaryJedisCommands
-    
+
     @Override
     public Long append(byte[] arg0, byte[] arg1) {
         return write(j -> j.append(arg0, arg1));
@@ -1068,12 +1072,14 @@ public class GeoJedis implements redis.clients.jedis.JedisCommands, redis.client
     }
 
     @Override
-    public Set<Tuple> zrangeByScoreWithScores(byte[] arg0, double arg1, double arg2, int arg3, int arg4) {
+    public Set<Tuple> zrangeByScoreWithScores(byte[] arg0, double arg1, double arg2, int arg3,
+            int arg4) {
         return read(j -> j.zrangeByScoreWithScores(arg0, arg1, arg2, arg3, arg4));
     }
 
     @Override
-    public Set<Tuple> zrangeByScoreWithScores(byte[] arg0, byte[] arg1, byte[] arg2, int arg3, int arg4) {
+    public Set<Tuple> zrangeByScoreWithScores(byte[] arg0, byte[] arg1, byte[] arg2, int arg3,
+            int arg4) {
         return read(j -> j.zrangeByScoreWithScores(arg0, arg1, arg2, arg3, arg4));
     }
 
@@ -1148,12 +1154,14 @@ public class GeoJedis implements redis.clients.jedis.JedisCommands, redis.client
     }
 
     @Override
-    public Set<Tuple> zrevrangeByScoreWithScores(byte[] arg0, double arg1, double arg2, int arg3, int arg4) {
+    public Set<Tuple> zrevrangeByScoreWithScores(byte[] arg0, double arg1, double arg2, int arg3,
+            int arg4) {
         return read(j -> j.zrevrangeByScoreWithScores(arg0, arg1, arg2, arg3, arg4));
     }
 
     @Override
-    public Set<Tuple> zrevrangeByScoreWithScores(byte[] arg0, byte[] arg1, byte[] arg2, int arg3, int arg4) {
+    public Set<Tuple> zrevrangeByScoreWithScores(byte[] arg0, byte[] arg1, byte[] arg2, int arg3,
+            int arg4) {
         return read(j -> j.zrevrangeByScoreWithScores(arg0, arg1, arg2, arg3, arg4));
     }
 
@@ -1171,5 +1179,5 @@ public class GeoJedis implements redis.clients.jedis.JedisCommands, redis.client
     public Double zscore(byte[] arg0, byte[] arg1) {
         return read(j -> j.zscore(arg0, arg1));
     }
-    
+
 }

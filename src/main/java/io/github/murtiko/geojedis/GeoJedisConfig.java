@@ -10,7 +10,8 @@ public class GeoJedisConfig {
 
     private final ConcurrentHashMap<String, Pool<Jedis>> localPools = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, Pool<Jedis>> remotePools = new ConcurrentHashMap<>();
-    private CircuitBreakerFactory circuitBreakerFactory = CircuitBreakerFactory.getInstance();
+
+    private CircuitBreakerFactory circuitBreakerFactory;
 
     public void addLocalPool(String name, Pool<Jedis> pool) {
         localPools.put(name, pool);
@@ -32,7 +33,7 @@ public class GeoJedisConfig {
         return circuitBreakerFactory;
     }
 
-    public void setCircuitBreakerFactory(CircuitBreakerFactory circuitBreakerFactory) {
-        this.circuitBreakerFactory = circuitBreakerFactory;
+    public void setCircuitBreakerFactory(CircuitBreakerFactory factory) {
+        this.circuitBreakerFactory = factory;
     }
 }

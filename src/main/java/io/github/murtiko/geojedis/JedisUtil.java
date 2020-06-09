@@ -15,7 +15,8 @@ public class JedisUtil {
     private JedisUtil() {
     }
 
-    public static <T> T tryExec(GeoJedisConfig config, String poolName, Pool<Jedis> pool, Function<Jedis, T> function) {
+    public static <T> T tryExec(GeoJedisConfig config, String poolName, Pool<Jedis> pool,
+            Function<Jedis, T> function) {
         try {
             return exec(config, poolName, pool, function);
         } catch (Exception e) {
@@ -23,12 +24,14 @@ public class JedisUtil {
             return null;
         }
     }
-    
-    public static <T> T exec(GeoJedisConfig config, String poolName, Pool<Jedis> pool, Function<Jedis, T> function) {
-        CircuitBreakerFactory cbUtil = config.getCircuitBreakerFactory();
-        if(cbUtil != null) {
-            return config.getCircuitBreakerFactory().get(poolName).executeSupplier(() -> doExec(pool, function));
-        }else {
+
+    public static <T> T exec(GeoJedisConfig config, String poolName, Pool<Jedis> pool,
+            Function<Jedis, T> function) {
+        CircuitBreakerFactory cbFactory = config.getCircuitBreakerFactory();
+        if (cbFactory != null) {
+            return config.getCircuitBreakerFactory().get(poolName)
+                    .executeSupplier(() -> doExec(pool, function));
+        } else {
             return doExec(pool, function);
         }
     }

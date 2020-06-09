@@ -1,7 +1,7 @@
 # geojedis
-<p>A simple wrapper to Jedis that replicates operations on multiple data centers on a best-effort basis to provide basic geo-redundancy.</p>
+<p>A simple wrapper to Jedis that replicates operations on multiple Sentinel pools (potentially residing on different data centers) on a best-effort basis to provide basic geo-redundancy features.</p>
 
-<p>Allows multiple "local" and "remote" pool categories.</p>
+<p>Allows "local" and "remote" pool categories, where multiple pools can be registered with each category.</p>
 
 <p>redis.clients.jedis.JedisCommands and redis.clients.jedis.BinaryJedisCommands interfaces are implemented.</p>
 
@@ -12,7 +12,7 @@
 
 <p>Available Write Strategies are:</p>
 <p>WriteLocalOnly : (default) Writes are performed only on all local pools, in the order they are configured.</p>
-<p>WriteAllSync : Writes are performed on all pools one by one from within the application thread.</p>
+<p>WriteAllSync : Writes are performed on all pools one by one from within the application thread, where local pools are attempted prior to remote pools.</p>
 <p>WriteNearestSyncRemainingAsync : Writes are performed on the first available pool from within the application thread. Remaining pools are updated in the background using a default cached thread-pool.</p>
 
 <p>It is possible to add custom read/update strategies.</p>
@@ -38,8 +38,19 @@ Sample code
         String val = geoJedis.get("testkey");
         System.out.println("queried testkey=" + val);
 
+<p>It is possible to configure circuit breaker, by default it is disabled.</p>
 
-<p>By default, a resilience4j circuit breaker is used for each pool, with the following default settings:</p>
+        // disables circuit-breaker
+        pools.setCircuitBreakerFactory(null);
+        
+        // enabled resilience4j based circuit-breaker (with default settings)
+        pools.setCircuitBreakerFactory(Resilience4JCircuitBreakerFactory.getInstance());
+        
+        // enabled resilience4j based circuit-breaker (with custom registry)
+        CircuitBreakerRegistry customRegistry = CircuitBreakerRegistry.of(customConfig);
+        pools.setCircuitBreakerFactory(Resilience4JCircuitBreakerFactory.getInstance(customRegistry));
+
+<p>The default ciscuit breaker is configured with the following settings:</p>
 
         CircuitBreakerConfig circuitBreakerConfig = CircuitBreakerConfig.custom()
                 .failureRateThreshold(50)
@@ -50,9 +61,4 @@ Sample code
                 .slidingWindowSize(10)
                 .build();
 
-<p>It is possible to customize the circuit breaker, or disable it (by setting to null):</p>
 <p>For more info on resilience4j refer to https://resilience4j.readme.io/docs/circuitbreaker</p>
-
-        CircuitBreakerUtil util = CircuitBreakerUtil.getInstance(myCustomCircuitBreakerRegistry);
-        GeoJedisConfig config = new GeoJedisConfig().setsetCircuitBreakerUtil(util); // null to disable circuit breaker
-        ...
